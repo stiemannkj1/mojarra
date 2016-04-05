@@ -307,16 +307,17 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 
                 var ddata = decodeURIComponent(data);
                 var dataArray = ddata.split("&");
+                var namingContainerId = this.context.namingContainerId;
                 var input;
                 this.requestParams = new Array();
                 for (var i=0; i<dataArray.length; i++) {
                     var nameValue = dataArray[i].split("=");
-                    if (nameValue[0] === "javax.faces.source" ||
-                        nameValue[0] === "javax.faces.partial.event" ||
-                        nameValue[0] === "javax.faces.partial.execute" ||
-                        nameValue[0] === "javax.faces.partial.render" ||
-                        nameValue[0] === "javax.faces.partial.ajax" ||
-                        nameValue[0] === "javax.faces.behavior.event") {
+                    if (nameValue[0] === namingContainerId + "javax.faces.source" ||
+                        nameValue[0] === namingContainerId + "javax.faces.partial.event" ||
+                        nameValue[0] === namingContainerId + "javax.faces.partial.execute" ||
+                        nameValue[0] === namingContainerId + "javax.faces.partial.render" ||
+                        nameValue[0] === namingContainerId + "javax.faces.partial.ajax" ||
+                        nameValue[0] === namingContainerId + "javax.faces.behavior.event") {
                         input = document.createElement("input");
                         input.setAttribute("type", "hidden");
                         input.setAttribute("id", nameValue[0]);
@@ -2553,6 +2554,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     ajaxEngine.context.onerror = onerror;
                     ajaxEngine.context.sourceid = element.id;
                     ajaxEngine.context.render = args[namingContainerId + "javax.faces.partial.render"];
+                    ajaxEngine.context.namingContainerId = namingContainerId;
                     ajaxEngine.sendRequest();
 
                     // null out element variables to protect against IE memory leak
