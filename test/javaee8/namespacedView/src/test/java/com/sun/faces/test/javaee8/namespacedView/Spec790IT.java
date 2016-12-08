@@ -49,6 +49,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Spec790IT {
 
@@ -97,11 +98,35 @@ public class Spec790IT {
         form2ViewState = (HtmlInput) form2.getInputByName(namingContainerPrefix + "javax.faces.ViewState");
         assertTrue(!form1ViewState.getValueAttribute().isEmpty());
         assertTrue(!form2ViewState.getValueAttribute().isEmpty());
+   }
+
+    @Ignore // fails due to https://sourceforge.net/p/htmlunit/bugs/1815/
+    @Test
+    public void testSpec790AjaxNavigation() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "spec790AjaxNavigation.xhtml");
+        String namingContainerPrefix = page.getHead().getId().split("(?<=:)", 2)[0];
+        HtmlForm formNavigateViaAjax = (HtmlForm) page.getHtmlElementById(namingContainerPrefix +
+            "formNavigateViaAjax");
+        HtmlInput formNavigateViaAjaxViewState = (HtmlInput) formNavigateViaAjax.getInputByName(namingContainerPrefix +
+            "javax.faces.ViewState");
+        assertTrue(!formNavigateViaAjaxViewState.getValueAttribute().isEmpty());
+
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById(namingContainerPrefix +
+            "formNavigateViaAjax:button");
+        page = button.click();
+        webClient.waitForBackgroundJavaScript(60000);
+        namingContainerPrefix = page.getHead().getId().split("(?<=:)", 2)[0];
+        HtmlForm form1 = (HtmlForm) page.getHtmlElementById(namingContainerPrefix + "form1");
+        HtmlInput form1ViewState = (HtmlInput) form1.getInputByName(namingContainerPrefix + "javax.faces.ViewState");
+        HtmlForm form2 = (HtmlForm) page.getHtmlElementById(namingContainerPrefix + "form2");
+        HtmlInput form2ViewState = (HtmlInput) form2.getInputByName(namingContainerPrefix + "javax.faces.ViewState");
+        assertTrue(!form1ViewState.getValueAttribute().isEmpty());
+        assertTrue(!form2ViewState.getValueAttribute().isEmpty());
     }
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
 }

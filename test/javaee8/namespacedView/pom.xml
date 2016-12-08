@@ -63,6 +63,15 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Pending: upgrade to htmlunit 2.24 when it is released to allow
+        Spec790IT.testSpec790AjaxNavigation() to pass. -->
+        <!--
+        <dependency>
+            <groupId>net.sourceforge.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
+            <version>2.24-SNAPSHOT</version>
+        </dependency>
+        -->
     </dependencies>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>

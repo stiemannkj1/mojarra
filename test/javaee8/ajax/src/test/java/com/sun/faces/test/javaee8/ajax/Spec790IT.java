@@ -49,6 +49,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Spec790IT {
 
@@ -96,9 +97,28 @@ public class Spec790IT {
         assertTrue(!form2ViewState.getValueAttribute().isEmpty());
     }
 
+    @Ignore // fails due to https://sourceforge.net/p/htmlunit/bugs/1815/
+    @Test
+    public void testSpec790AjaxNavigation() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "spec790AjaxNavigation.xhtml");
+        HtmlForm formNavigateViaAjax = (HtmlForm) page.getHtmlElementById("formNavigateViaAjax");
+        HtmlInput formNavigateViaAjaxViewState = (HtmlInput) formNavigateViaAjax.getInputByName("javax.faces.ViewState");
+        assertTrue(!formNavigateViaAjaxViewState.getValueAttribute().isEmpty());
+
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("formNavigateViaAjax:button");
+        page = button.click();
+        webClient.waitForBackgroundJavaScript(60000);
+        HtmlForm form1 = (HtmlForm) page.getHtmlElementById("form1");
+        HtmlInput form1ViewState = (HtmlInput) form1.getInputByName("javax.faces.ViewState");
+        HtmlForm form2 = (HtmlForm) page.getHtmlElementById("form2");
+        HtmlInput form2ViewState = (HtmlInput) form2.getInputByName("javax.faces.ViewState");
+        assertTrue(!form1ViewState.getValueAttribute().isEmpty());
+        assertTrue(!form2ViewState.getValueAttribute().isEmpty());
+    }
+
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
 }
