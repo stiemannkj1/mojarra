@@ -633,6 +633,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                 if (loadedScriptUrls.indexOf(url) < 0) {
                     // create script node
                     var scriptNode = document.createElement('script');
+					applyScriptOrStylesheetAttributes(scriptStr[1], scriptNode);
                     scriptNode.type = 'text/javascript';
                     scriptNode.src = url; // add the src to the script node
                     scriptNode.onload = scriptNode.onreadystatechange = function(_, abort) {
@@ -641,7 +642,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                             scriptNode = null;
                             runScript(head, loadedScriptUrls, scripts, index + 1); // Run next script.
                         }
-                    }
+                    };
                     head.insertBefore(scriptNode, null); // add it to end of the head (and don't remove it)
                     scriptLoadedViaUrl = true;
                 }
@@ -652,6 +653,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                 if (!!script) {
                     // create script node
                     var scriptNode = document.createElement('script');
+					applyScriptOrStylesheetAttributes(scriptStr[1], scriptNode);
                     scriptNode.type = 'text/javascript';
                     scriptNode.text = script; // add the code to the script node
                     head.appendChild(scriptNode); // add it to the head
@@ -714,6 +716,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                     if (loadedStylesheetUrls.indexOf(url) < 0) {
                         // create stylesheet node
                         var linkNode = document.createElement('link');
+						applyScriptOrStylesheetAttributes(linkStr[1], linkNode);
                         linkNode.type = 'text/css';
                         linkNode.rel = 'stylesheet';
                         linkNode.href = url;
@@ -721,7 +724,56 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                     }
                 }
             }
-        }
+        };
+
+		var applyScriptOrStylesheetAttributes = function applyScriptOrStylesheetAttributes(elementAttrsString, element) {
+
+			elementAttrsString = elementAttrsString.trim();
+
+			while (elementAttrsString.length > 0) {
+
+				var indexOfEquals = elementAttrsString.indexOf('=');
+				var indexOfWhitespace = elementAttrsString.search(/\s/);
+				var name;
+				var value = '';
+
+				if (indexOfWhitespace > -1 && (indexOfEquals === -1 || indexOfWhitespace < indexOfEquals)) {
+					name = elementAttrsString.substring(0, indexOfWhitespace);
+					elementAttrsString = elementAttrsString.substring(indexOfWhitespace + 1, elementAttrsString.length).trim();
+				}
+				else if (indexOfEquals > -1) {
+					name = elementAttrsString.substring(0, indexOfEquals).trim();
+					elementAttrsString = elementAttrsString.substring(indexOfEquals + 1, elementAttrsString.length);
+
+					var index;
+
+					if (elementAttrsString.length > 0) {
+						if (elementAttrsString.startsWith('"')) {
+							elementAttrsString = elementAttrsString.substring(1, elementAttrsString.length);
+							index = elementAttrsString.indexOf('"');
+						} else if (elementAttrsString.startsWith("'")) {
+							elementAttrsString = elementAttrsString.substring(1, elementAttrsString.length);
+							index = elementAttrsString.indexOf("'");
+						} else {
+							index = elementAttrsString.search(/\s/);
+						}
+
+						if (index > -1) {
+							value = elementAttrsString.substring(0, index);
+							elementAttrsString = elementAttrsString.substring(index + 1, elementAttrsString.length).trim();
+						} else {
+							value = elementAttrsString.trimRight();
+							elementAttrsString = '';
+						}
+					}
+				} else {
+					name = elementAttrsString.trim();
+					elementAttrsString = '';
+				}
+
+				element.setAttribute(name, value);
+			}
+		};
 
         /**
          * Replace DOM element with a new tagname and supplied innerHTML
