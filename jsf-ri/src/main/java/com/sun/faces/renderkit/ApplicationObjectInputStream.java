@@ -40,6 +40,7 @@
 
 package com.sun.faces.renderkit;
 
+import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -92,7 +93,7 @@ public class ApplicationObjectInputStream extends ObjectInputStream {
         // class loaders can look up the chain and not down the chain.
         String name = desc.getName();
         try {
-            return Class.forName(name,
+            return Util.classForName(name,
                                  true,
                                  Thread.currentThread().getContextClassLoader());
         } catch (ClassNotFoundException cnfe) {

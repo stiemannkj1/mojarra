@@ -84,6 +84,7 @@
                 <equals arg1="main" arg2="@{target}" />
                 <then>
                     <jsf.mvn dir="${basedir}/jsf-tools" goals="install" />
+                    <jsf.mvn dir="${basedir}/jsf-spi" goals="install" />
                 </then>
             </if>
             <subant target="@{target}" inheritAll="false">

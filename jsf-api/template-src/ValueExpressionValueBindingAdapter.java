@@ -40,6 +40,8 @@
 
 package @package@;
 
+import com.sun.faces.spi.ClassProviderFactory;
+
 import javax.el.ValueExpression;
 import javax.el.ELException;
 import javax.el.ELContext;
@@ -305,7 +307,7 @@ import java.io.Serializable;
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
-        return Class.forName(name, true, loader);
+        return ClassProviderFactory.getClassProvider().classForName(name, true, loader);
     }
  
 

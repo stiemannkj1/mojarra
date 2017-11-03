@@ -79,7 +79,7 @@ public class ViewScopeContextManager {
     public ViewScopeContextManager() {
         isCdiOneOneOrGreater = Util.isCdiOneOneOrGreater();
         try {
-            viewScopedCDIEventFireHelperImplClass = Class.forName("com.sun.faces.application.view.ViewScopedCDIEventFireHelperImpl");
+            viewScopedCDIEventFireHelperImplClass = Util.classForName("com.sun.faces.application.view.ViewScopedCDIEventFireHelperImpl");
         } catch (ClassNotFoundException ex) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE, "CDI 1.1 events not enabled", ex);

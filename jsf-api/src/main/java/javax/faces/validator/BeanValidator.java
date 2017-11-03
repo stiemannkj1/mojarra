@@ -40,6 +40,7 @@
 
 package javax.faces.validator;
 
+import com.sun.faces.spi.ClassProviderFactory;
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.logging.Logger;
@@ -413,10 +414,11 @@ public class BeanValidator implements Validator, PartialStateHolder {
             }
             else {
                 try {
-                    validationGroupsList.add(Class.forName(className, false, Thread.currentThread().getContextClassLoader()));
+                    validationGroupsList.add(ClassProviderFactory.getClassProvider()
+						.classForName(className, false, Thread.currentThread().getContextClassLoader()));
                 } catch (ClassNotFoundException e1) {
                     try {
-                        validationGroupsList.add(Class.forName(className));
+                        validationGroupsList.add(ClassProviderFactory.getClassProvider().classForName(className));
                     } catch (ClassNotFoundException e2) {
                         throw new FacesException("Validation group not found: " + className);
                     }

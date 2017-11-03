@@ -73,62 +73,8 @@
     
     <!-- Setup the time properties for use with the project -->
     <tstamp/>
-    
-    <!-- Properties needed throughout the project -->
 
-    <!-- Structural -->
-    <property name="api.dir" value="${jsf.build.home}/jsf-api"/>
-    <property name="mvn.api.dir" value="${api.dir}/build/mvn" />
-    <property name="impl.dir" value="${jsf.build.home}/jsf-ri"/>
-    <property name="regression.test.dir" value="${jsf.build.home}/jsf-test"/>
-    <property name="mvn.impl.dir" value="${jsf.build.home}/jsf-ri/build/mvn"/>
-    <property name="tools.dir" value="${jsf.build.home}/jsf-tools"/>    
-    <property name="demo.dir" value="${jsf.build.home}/jsf-demo"/>
-    <property name="spec.snapshot.dir" 
-              value="${demo.dir}/dist/spec-snapshot" />
-    <property name="impl.test.results.dir" value="${impl.dir}/testresults"/>
-    <property name="api.test.results.dir" value="${api.dir}/testresults"/>
-    <property name="regression.test.results.dir" 
-              value="${regression.test.dir}/build/testresults" />
-
-    <!-- Name -->
-    <property name="api-artifact-id" value="javax.faces-api"/>
-    <property name="impl-artifact-id" value="javax.faces"/>
-
-    <!-- Artifacts of interest -->
-    <property name="jsf-api-intermediate.jar" value="${api.dir}/build/lib/jsf-api-intermediate.jar"/>
-    <property name="javax.faces-api.jar" value="${api.dir}/build/lib/${api-artifact-id}.jar"/>
-    <property name="javax.faces.jar" value="${impl.dir}/build/lib/${impl-artifact-id}.jar"/>   
-    <property name="jsf.test.jar" value="${jsf.build.home}/lib/jsf-extensions-test-time.jar"/>    
-    <property name="installer.jar" value="${jsf.build.home}/common/lib/installer-builder.jar"/>
-    <property name="javanettasks.jar" value="${jsf.build.home}/common/lib/javanettasks-1.0.5.jar"/>
-    <property name="standard.renderkit.xml" value="${api.dir}/doc/standard-html-renderkit.xml"/>
-
-    <!-- Version -->
-    <property name="spec.version" value="2.2"/>
-    <property name="spec_version" value="2_2"/>
-    <property name="spec.snapshot.version" value="2.2-SNAPSHOT"/>
-    <property name="patch.version" value="16"/>
-    <property name="impl.name" value="Mojarra"/>
-    <property name="build.number" value="${DSTAMP}-${TSTAMP}"/>
-    <property name="build.type" value="-SNAPSHOT"/>
-    <property name="impl.version.number" value="${spec.version}.${patch.version}" />
-    <property name="impl.version" value="${impl.version.number}${build.type}"/>
-    <property name="full.impl.version" value="${impl.version.number} (${build.number}${build.type})"/>
-    <property name="snapshot.version" value="${impl.version.number}-SNAPSHOT"/>
-
-    <!-- Environment -->
-    <property environment="myenv" />
-    <property name="http.proxy.host" value=""/>
-    <property name="http.proxy.port" value=""/>
-    <property name="force.no.cluster" value=""/>
-
-    <!-- Change bundle -->
-    <property name="change.bundle.dir" value="${jsf.build.home}/common/ant/bin" />
-
-    <!-- Debug args (OVERRIDE IN BUILD.PROPERTIES) -->
-    <property name="debug.jvm.args" value=""/>
-
+	<import file="${jsf.build.home}/common/ant/properties.xml"/>
     <!--  TODO remove this once maven stuff is complete, it's just here for reference.
 
     <target name="mvn-init" unless="compile.classpath" xmlns:artifact="urn:maven-artifact-ant">
@@ -155,9 +101,6 @@
     </target>
 
     -->
-    <condition property="maven.repo.local" value="${maven.repo.local}" else="${user.home}/.m2/repository">
-        <isset property="maven.repo.local"/>
-    </condition>
 
     <artifact:localRepository id="local.repository" path="${maven.repo.local}"/>
     
@@ -187,13 +130,6 @@
         <remoteRepository refid="ibiblio.repo"/>
     </artifact:dependencies>
     
-    <artifact:dependencies filesetId="jsf-spi.filepath" pathId="jsf-spi.path">
-        <dependency groupId="com.sun.faces" artifactId="jsf-spi" version="1.0" scope="provided"/>
-        <localRepository refid="local.repository"/>
-        <remoteRepository refid="j.n.repo"/>
-        <remoteRepository refid="j.n.repo.snapshot"/>
-    </artifact:dependencies>
-    
     <artifact:dependencies filesetId="commons.filepath" pathId="commons.path">
         <dependency groupId="commons-collections" artifactId="commons-collections" version="2.1.1"/>
         <dependency groupId="commons-digester" artifactId="commons-digester" version="1.5"/>
@@ -221,6 +157,8 @@
     <!-- this is hard coded to match the values in ${basedir}/jsf-tools/pom.xml -->
     <property name="jsf-tools.jar" 
           value="${maven.repo.local}/com/sun/faces/build/jsf-tools/${snapshot.version}/jsf-tools-${snapshot.version}.jar" />
+    <property name="jsf-spi.jar" 
+          value="${maven.repo.local}/com/sun/faces/jsf-spi/${snapshot.version}/jsf-spi-${snapshot.version}.jar" />
 
     <!-- Test classpaths that are used in multiple places within the project -->
     <path id="junit.classpath">
@@ -267,7 +205,7 @@
 
 
     <path id="api-compile.classpath">
-        <path refid="jsf-spi.path"/>
+        <fileset file="${jsf-spi.jar}"/>
         <path refid="compile.path"/>
     </path>
 

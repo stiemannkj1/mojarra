@@ -423,7 +423,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
             result = (Boolean) appMap.get(beansValidationAvailabilityCacheKey);
         } else {
             try {
-                Thread.currentThread().getContextClassLoader().loadClass("javax.validation.MessageInterpolator");
+                Util.loadClass("javax.validation.MessageInterpolator", Thread.currentThread().getContextClassLoader());
                 // Check if the Implementation is available.
                 Object cachedObject = appMap.get(BeanValidator.VALIDATOR_FACTORY_KEY);
                 if(cachedObject instanceof ValidatorFactory) {

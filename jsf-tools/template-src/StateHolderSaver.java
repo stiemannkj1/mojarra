@@ -40,6 +40,8 @@
 
 package @package@;
 
+import com.sun.faces.spi.ClassProviderFactory;
+
 import javax.faces.context.FacesContext;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
@@ -179,6 +181,6 @@ class StateHolderSaver implements Serializable {
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
-        return Class.forName(name, false, loader);
+        return ClassProviderFactory.getClassProvider().classForName(name, false, loader);
     }
 }

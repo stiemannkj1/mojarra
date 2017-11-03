@@ -41,6 +41,7 @@
 package com.sun.faces.spi;
 
 
+import com.sun.faces.util.Util;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -137,7 +138,7 @@ public class ConfigurationResourceProviderFactory {
 	private static Class<?> getServiceClass(String servicesKey) {
 
 		try {
-			return Class.forName(servicesKey);
+			return Util.classForName(servicesKey);
 		}
 		catch (NoClassDefFoundError e) {
 			// no-op

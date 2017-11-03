@@ -41,6 +41,7 @@
 package javax.faces.context;
 
 
+import com.sun.faces.spi.ClassProviderFactory;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -98,7 +99,7 @@ public abstract class FacesContext {
             String declaringClassName = callstack[3].getClassName();
             try {
                 ClassLoader curLoader = curThread.getContextClassLoader();
-                Class declaringClass = curLoader.loadClass(declaringClassName);
+                Class declaringClass = ClassProviderFactory.getClassProvider().loadClass(declaringClassName, curLoader);
                 if (!FacesContextFactory.class.isAssignableFrom(declaringClass)) {
                     isCreatedFromValidFactory = false;
                 }

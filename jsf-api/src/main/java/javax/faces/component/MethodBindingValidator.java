@@ -40,6 +40,7 @@
 
 package javax.faces.component;
 
+import com.sun.faces.spi.ClassProviderFactory;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
@@ -210,6 +211,6 @@ class MethodBindingValidator extends MethodBindingAdapterBase implements Validat
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
-        return Class.forName(name, false, loader);
+        return ClassProviderFactory.getClassProvider().classForName(name, false, loader);
     }
 }

@@ -40,6 +40,7 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.util.Util;
 import java.beans.PropertyEditorSupport;
 
 /**
@@ -69,9 +70,8 @@ public abstract class ConverterPropertyEditorBase
         try {
             Object appAssociate = getPropertyEditorHelper();
             // Get targetClass for the current ClassLoader
-            Class<?> targetClass = Thread.currentThread()
-                  .getContextClassLoader()
-                  .loadClass(getTargetClass().getName());
+            Class<?> targetClass = Util.loadClass(getTargetClass().getName(), Thread.currentThread()
+                  .getContextClassLoader());
             Object value = appAssociate.getClass()
                   .getMethod("convertToObject", Class.class, String.class)
                   .invoke(
@@ -92,8 +92,8 @@ public abstract class ConverterPropertyEditorBase
     private Object getPropertyEditorHelper() throws Exception {
         // Load the current
         Class<?> facesContextClass =
-              Thread.currentThread().getContextClassLoader().loadClass(
-                    "com.sun.faces.application.ApplicationAssociate");
+              Util.loadClass("com.sun.faces.application.ApplicationAssociate", Thread.currentThread()
+					  .getContextClassLoader());
         // get the current context version of this class in case
         Object appAssociate =
               facesContextClass.getMethod("getCurrentInstance").invoke(null);
@@ -116,9 +116,8 @@ public abstract class ConverterPropertyEditorBase
     public String getAsText() {
         try {
             Object application = getPropertyEditorHelper();
-            Class<?> targetClass = Thread.currentThread()
-                  .getContextClassLoader()
-                  .loadClass(getTargetClass().getName());
+            Class<?> targetClass = Util.loadClass(getTargetClass().getName(), Thread.currentThread()
+                  .getContextClassLoader());
             String text = (String) application.getClass()
                   .getMethod("convertToString", Class.class, Object.class)
                   .invoke(application, targetClass, getValue());

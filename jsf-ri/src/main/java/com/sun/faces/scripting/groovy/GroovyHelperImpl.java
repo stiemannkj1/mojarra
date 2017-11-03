@@ -216,7 +216,7 @@ public class GroovyHelperImpl extends GroovyHelper {
                 c = gse.loadScriptByName(name);
             } catch (Exception e) {
                 try {
-                    c = gse.getGroovyClassLoader().loadClass(name);
+                    c = Util.loadClass(name, gse.getGroovyClassLoader());
                 } catch (ClassNotFoundException cnfe) {
                     throw new ClassNotFoundException(name, cnfe);
                 }

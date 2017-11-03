@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,58 +37,43 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.action;
+package com.sun.faces.spi;
 
-import com.sun.faces.lifecycle.Phase;
-import com.sun.faces.lifecycle.RenderResponsePhase;
-import com.sun.faces.util.Util;
-import java.util.Arrays;
-import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseListener;
-import javax.faces.lifecycle.Lifecycle;
+/**
+ * This SPI loads or obtains classes dynamically based on their name. Alternative implementations may be necessary in
+ * environments such as OSGi where the {@link ClassLoader}s behave differently than the default implementation.
+ * 
+ * @author Kyle Stiemann
+ */
+public interface ClassProvider {
 
-public class ActionLifecycle extends Lifecycle {
-    
-    public static final String ACTION_LIFECYCLE = "com.sun.faces.action.ActionLifecycle";
-    
-    private final RenderResponsePhase renderResponsePhase;
-    private Phase actionPhase;
-    
-    public ActionLifecycle() {
-        renderResponsePhase = new RenderResponsePhase();
-        try {
-            Class phaseClass = Util.classForName("com.sun.faces.action.ActionPhase");
-            actionPhase = (Phase) phaseClass.newInstance();
-        } catch(Throwable throwable) {  
-            actionPhase = null;
-        }
-    }
+	/**
+	 * Loads the named class, potentially using the suggested {@link ClassLoader}. The default implementation calls
+	 * {@code suggestedLoader.loadClass(name)}.
+	 * @param name
+	 * @param suggestedLoader
+	 * @return
+	 * @throws ClassNotFoundException 
+	 */
+	public Class<?> loadClass(String name, ClassLoader suggestedLoader)	throws ClassNotFoundException;
 
-    @Override
-    public void addPhaseListener(PhaseListener listener) {
-    }
+	/**
+	 * Obtains the named class, potentially using the suggested {@link ClassLoader}. The default implementation calls
+	 * {@code Class.forName(className, initialize, suggestedLoader)}.
+	 * @param name
+	 * @param initialize
+	 * @param suggestedLoader
+	 * @return
+	 * @throws ClassNotFoundException 
+	 */
+	public Class<?> classForName(String name, boolean initialize, ClassLoader suggestedLoader)
+			throws ClassNotFoundException;
 
-    @Override
-    public void execute(FacesContext context) throws FacesException {
-        if (actionPhase != null) {
-            actionPhase.doPhase(context, this, Arrays.asList(getPhaseListeners()).listIterator());
-        } else {
-            throw new FacesException("Unable to handle action");
-        }
-    }
-
-    @Override
-    public PhaseListener[] getPhaseListeners() {
-        return new PhaseListener[0];
-    }
-
-    @Override
-    public void removePhaseListener(PhaseListener listener) {
-    }
-
-    @Override
-    public void render(FacesContext context) throws FacesException {
-        renderResponsePhase.doPhase(context, this, Arrays.asList(getPhaseListeners()).listIterator());
-    }
+	/**
+	 * Obtains the named class. The default implementation calls {@code Class.forName(className)}.
+	 * @param name
+	 * @return
+	 * @throws ClassNotFoundException 
+	 */
+	public Class<?> classForName(String name) throws ClassNotFoundException;
 }

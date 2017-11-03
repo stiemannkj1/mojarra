@@ -57,6 +57,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
 /**
  * <p>
@@ -462,7 +463,7 @@ public class ConverterPropertyEditorFactory {
             //noinspection ObjectEquality
             if ((c == null) && (myLoader != null) && (myLoader != targetLoader)) {
                 try {
-                    c = myLoader.loadClass(name);
+                    c = Util.loadClass(name, myLoader);
                 } catch (ClassNotFoundException ignored) {
                     if (LOGGER.isLoggable(Level.FINEST)) {
                         LOGGER.log(Level.FINEST, "Ignoring ClassNotFoundException, continuing with parent ClassLoader.", ignored);
@@ -609,8 +610,7 @@ public class ConverterPropertyEditorFactory {
                 classLoaderCache.put(targetClass.getClassLoader(),
                     new WeakReference(loader));
             }
-            return (Class<? extends ConverterPropertyEditorBase>) loader
-                .loadClass(className);
+            return (Class<? extends ConverterPropertyEditorBase>) Util.loadClass(className, loader);
         } catch (ClassNotFoundException e) {
         	if (LOGGER.isLoggable(Level.WARNING)) {
 	            LOGGER.log(Level.WARNING,

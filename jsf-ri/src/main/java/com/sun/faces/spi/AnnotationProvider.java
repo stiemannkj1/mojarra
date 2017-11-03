@@ -116,13 +116,13 @@ public abstract class AnnotationProvider {
 
     public AnnotationProvider(ServletContext sc) {
 
-        this.sc = sc;
+        initialize(sc);
 
     }
 
     // ---------------------------------------------------------- Package Methods
 
-	void setServletContext(ServletContext sc) {
+	void initialize(ServletContext sc) {
 
 		this.sc = sc;
 

@@ -45,7 +45,7 @@ package com.sun.faces.util;
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.io.FastStringWriter;
-import com.sun.faces.scripting.groovy.GroovyHelper;
+import com.sun.faces.spi.ClassProviderFactory;
 
 import javax.el.ELResolver;
 import javax.el.ValueExpression;
@@ -203,7 +203,7 @@ public class Util {
         // if CDI 1.1 or greater is available
         boolean result = false;
         try {
-            Class.forName("javax.enterprise.context.Initialized");
+            classForName("javax.enterprise.context.Initialized");
             result = true;
         } catch (ClassNotFoundException ignored) {
             if (LOGGER.isLoggable(Level.FINEST)) {
@@ -325,6 +325,18 @@ public class Util {
         return factory;
     }
 
+	public static Class<?> loadClass(String name, ClassLoader suggestedLoader) throws ClassNotFoundException {
+		return ClassProviderFactory.getClassProvider().loadClass(name, suggestedLoader);
+	}
+
+	public static Class<?> classForName(String name) throws ClassNotFoundException {
+		return ClassProviderFactory.getClassProvider().classForName(name);
+	}
+
+	public static Class<?> classForName(String name, boolean initialize, ClassLoader suggestedLoader)
+			throws ClassNotFoundException {
+		return ClassProviderFactory.getClassProvider().classForName(name, initialize, suggestedLoader);
+	}
 
     public static Class loadClass(String name,
                                   Object fallbackClass)
@@ -356,12 +368,12 @@ public class Util {
         // to avoid CR 643419 and for all other cases, use ClassLoader.loadClass().
         if (loader.getClass() == com.sun.faces.scripting.groovy.GroovyHelperImpl.MojarraGroovyClassLoader.class) {
             if (name.charAt(0) == '[') {
-                return Class.forName(name, true, loader);
+                return classForName(name, true, loader);
             } else {
-                return loader.loadClass(name);
+                return loadClass(name, loader);
             }
         }        
-        return Class.forName(name, true, loader);
+        return classForName(name, true, loader);
     }
 
 

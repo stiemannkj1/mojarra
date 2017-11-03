@@ -41,6 +41,7 @@
 package javax.faces.convert;
 
 
+import com.sun.faces.spi.ClassProviderFactory;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.PartialStateHolder;
@@ -696,7 +697,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
 
     static {
         try {
-            currencyClass = Class.forName("java.util.Currency");
+            currencyClass = ClassProviderFactory.getClassProvider().classForName("java.util.Currency");
             // container's runtime is J2SE 1.4 or greater
         } catch (Exception ignored) {
         }
@@ -779,7 +780,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
             */
             Class[] paramTypes = new Class[1];
             paramTypes[0] = currencyClass;
-            Class numberFormatClass = Class.forName("java.text.NumberFormat");
+            Class numberFormatClass = ClassProviderFactory.getClassProvider().classForName("java.text.NumberFormat");
             m = numberFormatClass.getMethod("setCurrency", paramTypes);
             methodArgs[0] = currency;
             m.invoke(formatter, methodArgs);

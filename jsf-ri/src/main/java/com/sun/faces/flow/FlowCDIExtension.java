@@ -95,7 +95,7 @@ public class FlowCDIExtension implements Extension {
        if (isCdiOneOneOrGreater) {
            Class clazz = null;
            try {
-               clazz = Class.forName("com.sun.faces.flow.FlowCDIEventFireHelperImpl");
+               clazz = Util.classForName("com.sun.faces.flow.FlowCDIEventFireHelperImpl");
            } catch (ClassNotFoundException ex) {
                if (LOGGER.isLoggable(Level.SEVERE)) {
                    LOGGER.log(Level.SEVERE, "CDI 1.1 events not enabled", ex);

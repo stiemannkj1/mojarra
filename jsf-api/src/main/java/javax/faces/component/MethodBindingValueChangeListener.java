@@ -40,6 +40,7 @@
 
 package javax.faces.component;
 
+import com.sun.faces.spi.ClassProviderFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
@@ -209,6 +210,6 @@ class MethodBindingValueChangeListener extends MethodBindingAdapterBase implemen
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
-        return Class.forName(name, false, loader);
+        return ClassProviderFactory.getClassProvider().classForName(name, false, loader);
     }
 }

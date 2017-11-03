@@ -90,7 +90,7 @@ public class AnnotationProviderFactory {
 			if (iterator.hasNext()) {
 
 				annotationProvider = (AnnotationProvider) iterator.next();
-				annotationProvider.setServletContext(sc);
+				annotationProvider.initialize(sc);
 			}
 		}
 

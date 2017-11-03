@@ -43,6 +43,7 @@ package com.sun.faces.config;
 import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.util.FacesLogger;
 import static com.sun.faces.spi.AnnotationScanner.ScannedAnnotation;
+import com.sun.faces.util.Util;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -98,7 +99,8 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
             if (null != defaultHabitat) {
                 try {
                     Method getComponent = defaultHabitat.getClass().getDeclaredMethod("getComponent", Class.class);
-                    Class serverConfigLookupClass = Thread.currentThread().getContextClassLoader().loadClass("com.sun.enterprise.web.ServerConfigLookup");
+                    Class serverConfigLookupClass = Util.loadClass("com.sun.enterprise.web.ServerConfigLookup",
+							Thread.currentThread().getContextClassLoader());
                     Object serverConfigLookup = getComponent.invoke(defaultHabitat, serverConfigLookupClass);
                     
                     Method getDeploymentContext = serverConfigLookupClass.getMethod("getDeploymentContext", ServletContext.class);

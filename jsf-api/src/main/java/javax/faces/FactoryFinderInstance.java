@@ -41,6 +41,7 @@
 
 package javax.faces;
 
+import com.sun.faces.spi.ClassProviderFactory;
 import com.sun.faces.spi.InjectionProvider;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -379,7 +380,7 @@ final class FactoryFinderInstance {
         if ((null != previousImpl) &&
              (null != (factoryClass = getFactoryClass(factoryName)))) {
             try {
-                clazz = Class.forName(implName, false, classLoader);
+                clazz = ClassProviderFactory.getClassProvider().classForName(implName, false, classLoader);
                 getCtorArg = new Class[1];
                 getCtorArg[0] = factoryClass;
                 ctor = clazz.getConstructor(getCtorArg);
@@ -398,7 +399,7 @@ final class FactoryFinderInstance {
             // we have either no previousImpl or no appropriate one arg
             // ctor.
             try {
-                clazz = Class.forName(implName, false, classLoader);
+                clazz = ClassProviderFactory.getClassProvider().classForName(implName, false, classLoader);
                 // since this is the hard coded implementation default,
                 // there is no preceding implementation, so don't bother
                 // with a non-zero-arg ctor.
