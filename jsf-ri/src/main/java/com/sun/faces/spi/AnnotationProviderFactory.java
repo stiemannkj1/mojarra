@@ -45,6 +45,8 @@ import com.sun.faces.config.DelegatingAnnotationProvider;
 import javax.servlet.ServletContext;
 import javax.faces.FacesException;
 import java.lang.reflect.Constructor;
+import java.util.Iterator;
+import java.util.ServiceLoader;
 
 /**
  * 
@@ -80,6 +82,17 @@ public class AnnotationProviderFactory {
                 annotationProvider = (AnnotationProvider)provider;
             }
         }
+		else {
+
+			ServiceLoader<AnnotationProvider> serviceLoader = ServiceLoader.load(AnnotationProvider.class);
+			Iterator iterator = serviceLoader.iterator();
+
+			if (iterator.hasNext()) {
+
+				annotationProvider = (AnnotationProvider) iterator.next();
+				annotationProvider.setServletContext(sc);
+			}
+		}
 
         return annotationProvider;
     }

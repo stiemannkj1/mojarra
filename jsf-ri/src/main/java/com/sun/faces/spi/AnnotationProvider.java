@@ -110,12 +110,23 @@ public abstract class AnnotationProvider {
     // ------------------------------------------------------------ Constructors
 
 
+    public AnnotationProvider() {
+    }
+
+
     public AnnotationProvider(ServletContext sc) {
 
         this.sc = sc;
 
     }
 
+    // ---------------------------------------------------------- Package Methods
+
+	void setServletContext(ServletContext sc) {
+
+		this.sc = sc;
+
+	}
 
     // ---------------------------------------------------------- Public Methods
 
