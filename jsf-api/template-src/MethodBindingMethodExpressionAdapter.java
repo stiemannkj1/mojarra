@@ -40,8 +40,6 @@
 
 package @package@;
 
-import com.sun.faces.spi.ClassProviderFactory;
-
 import java.io.Serializable;
 
 import javax.faces.component.StateHolder;
@@ -307,7 +305,7 @@ import java.lang.reflect.Method;
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
-        return ClassProviderFactory.getClassProvider().classForName(name, true, loader);
+        return Class.forName(name, true, loader);
     }
  
 

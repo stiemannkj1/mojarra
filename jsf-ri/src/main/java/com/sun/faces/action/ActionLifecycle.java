@@ -41,7 +41,6 @@ package com.sun.faces.action;
 
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.lifecycle.RenderResponsePhase;
-import com.sun.faces.util.Util;
 import java.util.Arrays;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -58,7 +57,7 @@ public class ActionLifecycle extends Lifecycle {
     public ActionLifecycle() {
         renderResponsePhase = new RenderResponsePhase();
         try {
-            Class phaseClass = Util.classForName("com.sun.faces.action.ActionPhase");
+            Class phaseClass = Class.forName("com.sun.faces.action.ActionPhase");
             actionPhase = (Phase) phaseClass.newInstance();
         } catch(Throwable throwable) {  
             actionPhase = null;

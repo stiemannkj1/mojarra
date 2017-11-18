@@ -109,7 +109,7 @@ public class ViewScopeExtension implements Extension {
        if (isCdiOneOneOrGreater) {
            Class clazz = null;
            try {
-               clazz = Util.classForName("com.sun.faces.application.view.ViewScopedCDIEventFireHelperImpl");
+               clazz = Class.forName("com.sun.faces.application.view.ViewScopedCDIEventFireHelperImpl");
            } catch (ClassNotFoundException ex) {
                if (LOGGER.isLoggable(Level.SEVERE)) {
                    LOGGER.log(Level.SEVERE, "CDI 1.1 events not enabled", ex);

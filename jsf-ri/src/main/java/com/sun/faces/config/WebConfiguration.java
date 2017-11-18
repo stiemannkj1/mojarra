@@ -884,7 +884,7 @@ public class WebConfiguration {
     public boolean canProcessJndiEntries() {
 
         try {
-            Util.loadClass("javax.naming.InitialContext", this);
+            Util.getCurrentLoader(this).loadClass("javax.naming.InitialContext");
         } catch (Exception e) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine(

@@ -122,11 +122,11 @@ public abstract class AnnotationProvider {
 
     // ---------------------------------------------------------- Package Methods
 
-	void initialize(ServletContext sc) {
+    void initialize(ServletContext sc) {
 
-		this.sc = sc;
+        this.sc = sc;
 
-	}
+    }
 
     // ---------------------------------------------------------- Public Methods
 

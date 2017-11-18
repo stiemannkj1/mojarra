@@ -377,7 +377,7 @@ public class FlowCDIContext implements Context, Serializable {
         if (Util.isCdiOneOneOrGreater()) {
             Class flowCDIEventFireHelperImplClass = null;
             try {
-                flowCDIEventFireHelperImplClass = Util.classForName("com.sun.faces.flow.FlowCDIEventFireHelperImpl");
+                flowCDIEventFireHelperImplClass = Class.forName("com.sun.faces.flow.FlowCDIEventFireHelperImpl");
             } catch (ClassNotFoundException ex) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE, "CDI 1.1 events not enabled", ex);
@@ -409,7 +409,7 @@ public class FlowCDIContext implements Context, Serializable {
         if (Util.isCdiOneOneOrGreater()) {
             Class flowCDIEventFireHelperImplClass = null;
             try {
-                flowCDIEventFireHelperImplClass = Util.classForName("com.sun.faces.flow.FlowCDIEventFireHelperImpl");
+                flowCDIEventFireHelperImplClass = Class.forName("com.sun.faces.flow.FlowCDIEventFireHelperImpl");
             } catch (ClassNotFoundException ex) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE, "CDI 1.1 events not enabled", ex);

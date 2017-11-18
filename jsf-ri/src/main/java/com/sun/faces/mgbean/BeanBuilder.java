@@ -60,7 +60,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.bean.ManagedBean;
 
 /**
  * <p>Abstract builder for creating and populating JSF managed beans.</p>

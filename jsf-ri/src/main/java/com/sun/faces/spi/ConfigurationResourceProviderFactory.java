@@ -41,7 +41,6 @@
 package com.sun.faces.spi;
 
 
-import com.sun.faces.util.Util;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -113,40 +112,40 @@ public class ConfigurationResourceProviderFactory {
             }
         } else {
 
-			ServiceLoader serviceLoader;
+            ServiceLoader serviceLoader;
 
-			if (providerType.servicesKey.equals(FacesConfigResourceProvider.class.getName())) {
-				serviceLoader = ServiceLoader.load(FacesConfigResourceProvider.class);
-			}
-			else if (providerType.servicesKey.equals(FaceletConfigResourceProvider.class.getName())) {
-				serviceLoader = ServiceLoader.load(FaceletConfigResourceProvider.class);
-			}
-			else {
-				serviceLoader = ServiceLoader.load(getServiceClass(providerType.servicesKey));
-			}
+            if (providerType.servicesKey.equals(FacesConfigResourceProvider.class.getName())) {
+                serviceLoader = ServiceLoader.load(FacesConfigResourceProvider.class);
+            }
+            else if (providerType.servicesKey.equals(FaceletConfigResourceProvider.class.getName())) {
+                serviceLoader = ServiceLoader.load(FaceletConfigResourceProvider.class);
+            }
+            else {
+                serviceLoader = ServiceLoader.load(getServiceClass(providerType.servicesKey));
+            }
 
-			Iterator iterator = serviceLoader.iterator();
+            Iterator iterator = serviceLoader.iterator();
 
-			while (iterator.hasNext()) {
-				providers.add((ConfigurationResourceProvider) iterator.next());	
-			}
+            while (iterator.hasNext()) {
+                providers.add((ConfigurationResourceProvider) iterator.next());    
+            }
         }
 
-		return providers.toArray(new ConfigurationResourceProvider[providers.size()]);
+        return providers.toArray(new ConfigurationResourceProvider[providers.size()]);
     }
 
-	private static Class<?> getServiceClass(String servicesKey) {
+    private static Class<?> getServiceClass(String servicesKey) {
 
-		try {
-			return Util.classForName(servicesKey);
-		}
-		catch (NoClassDefFoundError e) {
-			// no-op
-		}
-		catch (ClassNotFoundException e) {
-			// no-op
-		}
+        try {
+            return Class.forName(servicesKey);
+        }
+        catch (NoClassDefFoundError e) {
+            // no-op
+        }
+        catch (ClassNotFoundException e) {
+            // no-op
+        }
 
-		return null;
-	}
+        return null;
+    }
 }

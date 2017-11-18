@@ -41,7 +41,6 @@
 package com.sun.faces.scripting;
 
 import com.sun.faces.scripting.groovy.GroovyHelper;
-import com.sun.faces.util.Util;
 import java.io.IOException;
 
 import java.lang.reflect.Field;
@@ -82,14 +81,14 @@ class WeldAwareGroovySupportFilter implements Filter {
     private void obtainReflectionReferences() throws Exception {
         ClassLoader tccl = Thread.currentThread().getContextClassLoader();
         
-        containerClass = Util.loadClass("org.jboss.weld.Container", tccl);
+        containerClass = tccl.loadClass("org.jboss.weld.Container");
         instanceField = containerClass.getDeclaredField("instance");
         instanceField.setAccessible(true);
         Class [] paramTypes = new Class[0];
         instanceMethod = containerClass.getDeclaredMethod("instance", paramTypes);
         instanceMethod.setAccessible(true);
         
-        singletonClass = Util.loadClass("org.jboss.weld.bootstrap.api.Singleton", tccl);
+        singletonClass = tccl.loadClass("org.jboss.weld.bootstrap.api.Singleton");
         paramTypes = new Class[1];
         paramTypes[0] = Object.class;
         singletonSetMethod = singletonClass.getDeclaredMethod("set", paramTypes);

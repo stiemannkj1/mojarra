@@ -49,17 +49,7 @@
 <project name="jsf-spi" default="main" basedir=".">
     <property file="${user.home}/build.properties"/>
     <property file="../build.properties"/>
-    <taskdef resource="net/sf/antcontrib/antlib.xml">
-        <classpath>
-            <pathelement
-                  location="${jsf.build.home}/common/lib/ant-contrib.jar"/>
-        </classpath>
-    </taskdef>
-    <import file="${jsf.build.home}/common/ant/properties.xml"/>
-
-    <!-- this is hard coded to match the values in ${basedir}/jsf-tools/pom.xml -->
-    <property name="jsf-tools.jar" 
-          value="${maven.repo.local}/com/sun/faces/build/jsf-tools/${snapshot.version}/jsf-tools-${snapshot.version}.jar" />
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
 
     <property name="src.dir" 
               value="${impl.dir}/src/main/java" />
@@ -101,13 +91,12 @@
         </condition>
         <property name="exec.name" value="${java.home}/bin/javac"/>
         <property name="exec.arg.1" value=""/>
-        <property name="exec.arg.cp"
-                 value="${jsf-spi-intermediate.jar}:${jsf-tools.jar}"/>
         <condition property="exec.arg.cp"
                  value="${jsf-spi-intermediate.jar};${jsf-tools.jar}">
           <os family="windows"/>
         </condition>
-    	<echo>tools path: ${exec.arg.cp}</echo>
+        <property name="exec.arg.cp" value="${jsf-spi-intermediate.jar}:${jsf-tools.jar}"/>
+    	<echo>tools path:  ${jsf-spi-intermediate.jar}:${jsf-tools.jar}</echo>
         <!-- invoke the javac processor to produce stripped .class files -->
         <delete dir="${classes.dir}">
           <include name="**/*.class" />
@@ -119,7 +108,7 @@
             <arg line="-cp ${exec.arg.cp}"/>
             <arg line="-processor com.sun.faces.tools.StripClassesForApiJar"/>
             <arg line="-Acom.sun.tools.javac.sym.Jar=${jsf-spi-intermediate.jar}"/>
-            <arg line="-Acom.sun.tools.javac.sym.ExtraApiClassPath=${maven.compile.classpath}"/>
+            <arg line="-Acom.sun.tools.javac.sym.ExtraApiClassPath=${javaee-api.jar}"/>
             <arg line="-Acom.sun.tools.javac.sym.Dest=${classes.dir}"/>
             <arg line="${src.paths}"/>
         </exec>
