@@ -90,7 +90,7 @@ public class AnnotationProviderFactory {
 			if (iterator.hasNext()) {
 
 				annotationProvider = (AnnotationProvider) iterator.next();
-				annotationProvider.initialize(sc);
+				annotationProvider.initialize(sc, annotationProvider);
 			}
 		}
 

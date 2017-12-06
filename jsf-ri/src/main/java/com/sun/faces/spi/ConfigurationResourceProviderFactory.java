@@ -114,15 +114,17 @@ public class ConfigurationResourceProviderFactory {
 
             ServiceLoader serviceLoader;
 
-            if (providerType.servicesKey.equals(FacesConfigResourceProvider.class.getName())) {
-                serviceLoader = ServiceLoader.load(FacesConfigResourceProvider.class);
-            }
-            else if (providerType.servicesKey.equals(FaceletConfigResourceProvider.class.getName())) {
-                serviceLoader = ServiceLoader.load(FaceletConfigResourceProvider.class);
-            }
-            else {
-                serviceLoader = ServiceLoader.load(getServiceClass(providerType.servicesKey));
-            }
+			switch (providerType) {
+				case FacesConfig:
+					serviceLoader = ServiceLoader.load(FacesConfigResourceProvider.class);
+				break;
+				case FaceletConfig:
+					serviceLoader = ServiceLoader.load(FaceletConfigResourceProvider.class);
+				break;
+				default:
+					throw new UnsupportedOperationException(providerType.servicesKey +
+						" cannot be loaded via ServiceLoader API.");
+			}
 
             Iterator iterator = serviceLoader.iterator();
 
@@ -132,20 +134,5 @@ public class ConfigurationResourceProviderFactory {
         }
 
         return providers.toArray(new ConfigurationResourceProvider[providers.size()]);
-    }
-
-    private static Class<?> getServiceClass(String servicesKey) {
-
-        try {
-            return Class.forName(servicesKey);
-        }
-        catch (NoClassDefFoundError e) {
-            // no-op
-        }
-        catch (ClassNotFoundException e) {
-            // no-op
-        }
-
-        return null;
     }
 }
